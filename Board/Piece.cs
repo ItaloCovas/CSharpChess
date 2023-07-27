@@ -11,9 +11,9 @@ namespace Board
 
         public ChessBoard Board { get; protected set; }
 
-        public Piece(Position position, ChessBoard board, Color color)
+        public Piece(ChessBoard board, Color color)
         {
-            Position = position;
+            Position = null;
             Color = color;
             Board = board;
             MovementAmount = 0;

@@ -1,3 +1,5 @@
+using CSharpChess.Board.Exceptions;
+
 namespace Board
 {
     class ChessBoard
@@ -16,10 +18,41 @@ namespace Board
             pieces = new Piece[Rows, Columns];
         }
 
-        public override string ToString()
+        public Piece GetPiece(int row, int col)
         {
-            return "";
+            return pieces[row, col];
         }
+
+        public Piece GetPiece(Position position)
+        {
+            return pieces[position.Row, position.Column];
+        }
+
+        public void InsertPiece(Piece piece, Position position)
+        {
+            if (PieceExists(position))
+            {
+                throw new ChessBoardException("There is already a piece in this position.");
+            }
+            pieces[position.Row, position.Column] = piece;
+            piece.Position = position;
+        }
+
+        public bool PieceExists(Position position)
+        {
+            IsPositionValid(position);
+            return GetPiece(position) != null;
+        }
+        public bool IsPositionValid(Position position)
+        {
+            if (position.Row < 0 || position.Row >= Rows || position.Column < 0 || position.Column >= Columns)
+            {
+                throw new ChessBoardException("Invalid position!");
+            }
+
+            return true;
+        }
+
 
     }
 }
