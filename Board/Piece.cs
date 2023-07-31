@@ -2,7 +2,7 @@ using Board.Enums;
 
 namespace Board
 {
-    class Piece
+    abstract class Piece
     {
         public Position Position { get; set; }
 
@@ -23,6 +23,8 @@ namespace Board
         {
             MovementAmount++;
         }
+
+        public abstract bool[,] PossibleMovements();
 
         public override string ToString()
         {
