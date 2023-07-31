@@ -11,15 +11,24 @@ namespace CSharpChess
         {
             try
             {
-                ChessBoard board = new ChessBoard(8, 8);
+                Match match = new Match();
 
-                board.InsertPiece(new King(board, Color.Red), new Position(0, 0));
-                board.InsertPiece(new King(board, Color.Red), new Position(1, 3));
-                board.InsertPiece(new King(board, Color.Red), new Position(0, 2));
+                while (!match.Finished)
+                {
+                    Console.Clear();
+                    Screen.PrintBoard(match.Board);
 
+                    Console.WriteLine();
+                    Console.Write("Origem: ");
+                    Position origin = Screen.ReadChessPosition().ToPosition();
 
+                    Console.Write("Destino: ");
+                    Position destiny = Screen.ReadChessPosition().ToPosition();
 
-                Screen.PrintBoard(board);
+                    match.MakeMovement(origin, destiny);
+                }
+
+                Screen.PrintBoard(match.Board);
             }
             catch (ChessBoardException e)
             {

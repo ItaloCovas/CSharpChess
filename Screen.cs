@@ -1,10 +1,21 @@
 using Board;
 using Board.Enums;
+using CSharpChess.Chess;
 
 namespace CSharpChess
 {
     class Screen
     {
+
+        public static ChessPosition ReadChessPosition()
+        {
+            string s = Console.ReadLine();
+
+            char column = s[0];
+            int line = int.Parse(s[1] + "");
+
+            return new ChessPosition(column, line);
+        }
         public static void PrintBoard(ChessBoard board)
         {
             for (int i = 0; i < board.Rows; i++)
@@ -41,5 +52,6 @@ namespace CSharpChess
                 Console.ForegroundColor = aux;
             }
         }
+
     }
 }

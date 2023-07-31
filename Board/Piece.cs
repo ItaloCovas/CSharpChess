@@ -19,6 +19,11 @@ namespace Board
             MovementAmount = 0;
         }
 
+        public void IncreaseMovementAmount()
+        {
+            MovementAmount++;
+        }
+
         public override string ToString()
         {
             return "";
