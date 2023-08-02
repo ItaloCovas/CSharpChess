@@ -6,8 +6,10 @@ namespace CSharpChess.Chess
     class Match
     {
         public ChessBoard Board { get; private set; }
-        private int Round;
-        private Color CurrentPlayer;
+
+        public int Round { get; private set; }
+
+        public Color CurrentPlayer { get; private set; }
         public bool Finished { get; private set; }
 
         public Match()
@@ -15,15 +17,35 @@ namespace CSharpChess.Chess
             Board = new ChessBoard(8, 8);
             Round = 1;
             CurrentPlayer = Color.White;
+            Finished = false;
             InsertPieces();
         }
 
-        public void MakeMovement(Position origin, Position destiny)
+        private void MakePieceMovement(Position origin, Position destiny)
         {
             Piece piece = Board.RemovePiece(origin);
             piece.IncreaseMovementAmount();
             Piece capturedPiece = Board.RemovePiece(destiny);
             Board.InsertPiece(piece, destiny);
+        }
+
+        public void MakeMove(Position origin, Position destiny)
+        {
+            MakePieceMovement(origin, destiny);
+            Round++;
+            ChangePlayer();
+        }
+
+        private void ChangePlayer()
+        {
+            if (CurrentPlayer == Color.White)
+            {
+                CurrentPlayer = Color.Black;
+            }
+            else
+            {
+                CurrentPlayer = Color.White;
+            }
         }
 
         private void InsertPieces()

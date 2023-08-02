@@ -26,10 +26,5 @@ namespace Board
 
         public abstract bool[,] PossibleMovements();
 
-        public override string ToString()
-        {
-            return "";
-        }
-
     }
 }

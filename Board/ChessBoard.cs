@@ -61,10 +61,18 @@ namespace Board
         {
             if (position.Row < 0 || position.Row >= Rows || position.Column < 0 || position.Column >= Columns)
             {
-                throw new ChessBoardException("Invalid position!");
+                return false;
             }
 
             return true;
+        }
+
+        public void validatePosition(Position pos)
+        {
+            if (!IsPositionValid(pos))
+            {
+                throw new ChessBoardException("Invalid position!");
+            }
         }
 
 

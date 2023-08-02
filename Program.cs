@@ -17,24 +17,35 @@ namespace CSharpChess
                 {
                     Console.Clear();
                     Screen.PrintBoard(match.Board);
+                    Console.WriteLine();
+                    Console.WriteLine($"Round: {match.Round}");
+                    Console.WriteLine($"Waiting for move: {match.CurrentPlayer}");
+
+
 
                     Console.WriteLine();
-                    Console.Write("Origem: ");
+                    Console.Write("Origin: ");
                     Position origin = Screen.ReadChessPosition().ToPosition();
 
-                    Console.Write("Destino: ");
+                    bool[,] possiblePositions = match.Board.GetPiece(origin).PossibleMovements();
+
+
+                    Console.Clear();
+                    Screen.PrintBoard(match.Board, possiblePositions);
+
+                    Console.WriteLine();
+
+                    Console.Write("Destiny: ");
                     Position destiny = Screen.ReadChessPosition().ToPosition();
 
-                    match.MakeMovement(origin, destiny);
+                    match.MakeMove(origin, destiny);
                 }
-
-                Screen.PrintBoard(match.Board);
             }
             catch (ChessBoardException e)
             {
+                Console.WriteLine(e);
                 Console.WriteLine(e.Message);
             }
-
         }
     }
 }

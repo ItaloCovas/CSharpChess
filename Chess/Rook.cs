@@ -59,7 +59,7 @@ namespace CSharpChess.Chess
                 position.Column = position.Column + 1;
             }
 
-            //Right
+            //Left
             position.SetValues(Position.Row, Position.Column - 1);
             while (Board.IsPositionValid(position) && CanMove(position))
             {
@@ -75,7 +75,6 @@ namespace CSharpChess.Chess
             return movements;
 
         }
-
 
 
         public override string ToString()
