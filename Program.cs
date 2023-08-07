@@ -15,35 +15,44 @@ namespace CSharpChess
 
                 while (!match.Finished)
                 {
-                    Console.Clear();
-                    Screen.PrintBoard(match.Board);
-                    Console.WriteLine();
-                    Console.WriteLine($"Round: {match.Round}");
-                    Console.WriteLine($"Waiting for move: {match.CurrentPlayer}");
+                    try
+                    {
+                        Console.Clear();
+                        Screen.PrintBoard(match.Board);
+                        Console.WriteLine();
+                        Console.WriteLine($"Round: {match.Round}");
+                        Console.WriteLine($"Waiting for move: {match.CurrentPlayer}");
 
 
 
-                    Console.WriteLine();
-                    Console.Write("Origin: ");
-                    Position origin = Screen.ReadChessPosition().ToPosition();
+                        Console.WriteLine();
+                        Console.Write("Origin: ");
+                        Position origin = Screen.ReadChessPosition().ToPosition();
+                        match.ValidateOriginPosition(origin);
 
-                    bool[,] possiblePositions = match.Board.GetPiece(origin).PossibleMovements();
+                        bool[,] possiblePositions = match.Board.GetPiece(origin).PossibleMovements();
 
 
-                    Console.Clear();
-                    Screen.PrintBoard(match.Board, possiblePositions);
+                        Console.Clear();
+                        Screen.PrintBoard(match.Board, possiblePositions);
 
-                    Console.WriteLine();
+                        Console.WriteLine();
 
-                    Console.Write("Destiny: ");
-                    Position destiny = Screen.ReadChessPosition().ToPosition();
+                        Console.Write("Destiny: ");
+                        Position destiny = Screen.ReadChessPosition().ToPosition();
+                        match.ValidateDestinyPosition(origin, destiny);
 
-                    match.MakeMove(origin, destiny);
+                        match.MakeMove(origin, destiny);
+                    }
+                    catch (ChessBoardException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
                 }
             }
             catch (ChessBoardException e)
             {
-                Console.WriteLine(e);
                 Console.WriteLine(e.Message);
             }
         }

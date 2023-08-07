@@ -1,5 +1,6 @@
 using Board;
 using Board.Enums;
+using CSharpChess.Board.Exceptions;
 
 namespace CSharpChess.Chess
 {
@@ -12,12 +13,18 @@ namespace CSharpChess.Chess
         public Color CurrentPlayer { get; private set; }
         public bool Finished { get; private set; }
 
+        private HashSet<Piece> Pieces;
+        private HashSet<Piece> CapturedPieces;
+
+
         public Match()
         {
             Board = new ChessBoard(8, 8);
             Round = 1;
             CurrentPlayer = Color.White;
             Finished = false;
+            Pieces = new HashSet<Piece>();
+            CapturedPieces = new HashSet<Piece>();
             InsertPieces();
         }
 
@@ -27,6 +34,11 @@ namespace CSharpChess.Chess
             piece.IncreaseMovementAmount();
             Piece capturedPiece = Board.RemovePiece(destiny);
             Board.InsertPiece(piece, destiny);
+
+            if (capturedPiece != null)
+            {
+                CapturedPieces.Add(capturedPiece);
+            }
         }
 
         public void MakeMove(Position origin, Position destiny)
@@ -48,21 +60,86 @@ namespace CSharpChess.Chess
             }
         }
 
+        public void ValidateOriginPosition(Position position)
+        {
+            if (Board.GetPiece(position) == null)
+            {
+                throw new ChessBoardException("There is no piece in this position.");
+            }
+
+            if (CurrentPlayer != Board.GetPiece(position).Color)
+            {
+                throw new ChessBoardException($"This piece is not yours, you can move just {CurrentPlayer} pieces.");
+
+            }
+
+            if (!Board.GetPiece(position).HasPossibleMovements())
+            {
+                throw new ChessBoardException("There is possible movements for this piece.");
+
+            }
+        }
+
+        public void ValidateDestinyPosition(Position origin, Position destiny)
+        {
+            if (!Board.GetPiece(origin).CanMoveTo(destiny))
+            {
+                throw new ChessBoardException("Invalid destiny position!");
+            }
+        }
+
+        public HashSet<Piece> InGamePieces(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+
+            foreach (Piece x in Pieces)
+            {
+                if (x.Color == color)
+                {
+                    aux.Add(x);
+                }
+            }
+
+            return aux;
+        }
+
+
+        public HashSet<Piece> GetCapturedPieces(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+
+            foreach (Piece x in CapturedPieces)
+            {
+                if (x.Color == color)
+                {
+                    aux.Add(x);
+                }
+            }
+
+            return aux;
+        }
+        public void InsertNewPiece(char column, int row, Piece piece)
+        {
+            Board.InsertPiece(piece, new ChessPosition(column, row).ToPosition());
+            Pieces.Add(piece);
+        }
         private void InsertPieces()
         {
-            Board.InsertPiece(new Rook(Board, Color.White), new ChessPosition('c', 1).ToPosition());
-            Board.InsertPiece(new Rook(Board, Color.White), new ChessPosition('c', 2).ToPosition());
-            Board.InsertPiece(new Rook(Board, Color.White), new ChessPosition('d', 2).ToPosition());
-            Board.InsertPiece(new Rook(Board, Color.White), new ChessPosition('e', 2).ToPosition());
-            Board.InsertPiece(new Rook(Board, Color.White), new ChessPosition('e', 1).ToPosition());
-            Board.InsertPiece(new King(Board, Color.White), new ChessPosition('d', 1).ToPosition());
+            InsertNewPiece('c', 1, new Rook(Board, Color.White));
+            InsertNewPiece('c', 2, new Rook(Board, Color.White));
+            InsertNewPiece('d', 2, new Rook(Board, Color.White));
+            InsertNewPiece('e', 2, new Rook(Board, Color.White));
+            InsertNewPiece('e', 1, new Rook(Board, Color.White));
+            InsertNewPiece('d', 1, new Rook(Board, Color.White));
 
-            Board.InsertPiece(new Rook(Board, Color.Black), new ChessPosition('c', 7).ToPosition());
-            Board.InsertPiece(new Rook(Board, Color.Black), new ChessPosition('c', 8).ToPosition());
-            Board.InsertPiece(new Rook(Board, Color.Black), new ChessPosition('d', 7).ToPosition());
-            Board.InsertPiece(new Rook(Board, Color.Black), new ChessPosition('e', 7).ToPosition());
-            Board.InsertPiece(new Rook(Board, Color.Black), new ChessPosition('e', 8).ToPosition());
-            Board.InsertPiece(new King(Board, Color.Black), new ChessPosition('d', 8).ToPosition());
+            InsertNewPiece('c', 7, new Rook(Board, Color.White));
+            InsertNewPiece('c', 8, new Rook(Board, Color.White));
+            InsertNewPiece('d', 7, new Rook(Board, Color.White));
+            InsertNewPiece('e', 7, new Rook(Board, Color.White));
+            InsertNewPiece('e', 8, new Rook(Board, Color.White));
+            InsertNewPiece('d', 8, new King(Board, Color.Black));
+
+
 
         }
         public override string ToString()
