@@ -18,12 +18,7 @@ namespace CSharpChess
                     try
                     {
                         Console.Clear();
-                        Screen.PrintBoard(match.Board);
-                        Console.WriteLine();
-                        Console.WriteLine($"Round: {match.Round}");
-                        Console.WriteLine($"Waiting for move: {match.CurrentPlayer}");
-
-
+                        Screen.PrintMatch(match);
 
                         Console.WriteLine();
                         Console.Write("Origin: ");

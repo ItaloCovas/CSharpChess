@@ -7,6 +7,44 @@ namespace CSharpChess
     class Screen
     {
 
+        public static void PrintMatch(Match match)
+        {
+            PrintBoard(match.Board);
+            Console.WriteLine();
+            PrintCapturedPieces(match);
+            Console.WriteLine();
+            Console.WriteLine($"Round: {match.Round}");
+            Console.WriteLine($"Waiting for move: {match.CurrentPlayer}");
+            if (match.Check)
+            {
+                Console.WriteLine("CHECK!!!");
+
+            }
+        }
+
+        public static void PrintCapturedPieces(Match match)
+        {
+            Console.WriteLine("Captured pieces:");
+            Console.Write("White: ");
+            PrintPieces(match.GetCapturedPieces(Color.White));
+            Console.Write(" Black: ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            PrintPieces(match.GetCapturedPieces(Color.Black));
+            Console.ForegroundColor = aux;
+            Console.WriteLine("");
+        }
+
+        public static void PrintPieces(HashSet<Piece> pieces)
+        {
+            Console.Write("[");
+            foreach (Piece piece in pieces)
+            {
+                Console.Write($"{piece} ");
+            }
+            Console.Write("]");
+        }
+
         public static ChessPosition ReadChessPosition()
         {
             string s = Console.ReadLine();

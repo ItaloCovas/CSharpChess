@@ -24,6 +24,11 @@ namespace Board
             MovementAmount++;
         }
 
+        public void DecreaseMovementAmount()
+        {
+            MovementAmount--;
+        }
+
         public bool HasPossibleMovements()
         {
             bool[,] arr = PossibleMovements();

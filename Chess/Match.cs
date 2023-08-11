@@ -12,6 +12,7 @@ namespace CSharpChess.Chess
 
         public Color CurrentPlayer { get; private set; }
         public bool Finished { get; private set; }
+        public bool Check { get; private set; }
 
         private HashSet<Piece> Pieces;
         private HashSet<Piece> CapturedPieces;
@@ -23,12 +24,13 @@ namespace CSharpChess.Chess
             Round = 1;
             CurrentPlayer = Color.White;
             Finished = false;
+            Check = false;
             Pieces = new HashSet<Piece>();
             CapturedPieces = new HashSet<Piece>();
             InsertPieces();
         }
 
-        private void MakePieceMovement(Position origin, Position destiny)
+        private Piece MakePieceMovement(Position origin, Position destiny)
         {
             Piece piece = Board.RemovePiece(origin);
             piece.IncreaseMovementAmount();
@@ -39,14 +41,43 @@ namespace CSharpChess.Chess
             {
                 CapturedPieces.Add(capturedPiece);
             }
+            return capturedPiece;
+        }
+
+        public void UndoMovement(Position origin, Position destiny, Piece capturedPiece)
+        {
+            Piece piece = Board.RemovePiece(destiny);
+            piece.DecreaseMovementAmount();
+            if (capturedPiece != null)
+            {
+                Board.InsertPiece(capturedPiece, destiny);
+                CapturedPieces.Remove(capturedPiece);
+            }
+            Board.InsertPiece(piece, origin);
         }
 
         public void MakeMove(Position origin, Position destiny)
         {
-            MakePieceMovement(origin, destiny);
+            Piece capturedPiece = MakePieceMovement(origin, destiny);
+            if (IsInCheck(CurrentPlayer))
+            {
+                UndoMovement(origin, destiny, capturedPiece);
+                throw new ChessBoardException("You can't put yourself in check.");
+            }
+
+            if (IsInCheck(Opponent(CurrentPlayer)))
+            {
+                Check = true;
+            }
+            else
+            {
+                Check = false;
+            }
+
             Round++;
             ChangePlayer();
         }
+
 
         private void ChangePlayer()
         {
@@ -100,9 +131,54 @@ namespace CSharpChess.Chess
                 }
             }
 
+            aux.ExceptWith(GetCapturedPieces(color));
+
             return aux;
         }
 
+        private Color Opponent(Color color)
+        {
+            if (color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        private Piece King(Color color)
+        {
+            foreach (Piece piece in InGamePieces(color))
+            {
+                if (piece is King)
+                {
+                    return piece;
+                }
+            }
+            return null;
+        }
+
+        public bool IsInCheck(Color color)
+        {
+            Piece K = King(color);
+            if (K == null)
+            {
+                throw new ChessBoardException("There is no king with this color.");
+            }
+
+            foreach (Piece piece in InGamePieces(Opponent(color)))
+            {
+                bool[,] arr = piece.PossibleMovements();
+                if (arr[K.Position.Row, K.Position.Column])
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public HashSet<Piece> GetCapturedPieces(Color color)
         {
