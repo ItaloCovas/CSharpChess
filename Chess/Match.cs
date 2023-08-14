@@ -16,6 +16,7 @@ namespace CSharpChess.Chess
 
         private HashSet<Piece> Pieces;
         private HashSet<Piece> CapturedPieces;
+        public Piece VulnerableEnPassant;
 
 
         public Match()
@@ -25,6 +26,7 @@ namespace CSharpChess.Chess
             CurrentPlayer = Color.White;
             Finished = false;
             Check = false;
+            VulnerableEnPassant = null;
             Pieces = new HashSet<Piece>();
             CapturedPieces = new HashSet<Piece>();
             InsertPieces();
@@ -41,6 +43,47 @@ namespace CSharpChess.Chess
             {
                 CapturedPieces.Add(capturedPiece);
             }
+
+            // Special move "Short Castling"
+            if (piece is King && destiny.Column == origin.Column + 2)
+            {
+                Position rookPosition = new Position(origin.Row, origin.Column + 3);
+                Position destinyRookPosition = new Position(origin.Row, origin.Column + 1);
+                Piece r = Board.RemovePiece(rookPosition);
+                r.IncreaseMovementAmount();
+                Board.InsertPiece(r, destinyRookPosition);
+            }
+
+            // Special move "Long Castling"
+            if (piece is King && destiny.Column == origin.Column - 2)
+            {
+                Position rookPosition = new Position(origin.Row, origin.Column - 4);
+                Position destinyRookPosition = new Position(origin.Row, origin.Column - 1);
+                Piece r = Board.RemovePiece(rookPosition);
+                r.IncreaseMovementAmount();
+                Board.InsertPiece(r, destinyRookPosition);
+            }
+
+            // Special move "En passant"
+            if (piece is Pawn)
+            {
+                if (origin.Column != destiny.Column && capturedPiece == null)
+                {
+                    Position pawnPosition;
+                    if (piece.Color == Color.White)
+                    {
+                        pawnPosition = new Position(destiny.Row + 1, destiny.Column);
+                    }
+                    else
+                    {
+                        pawnPosition = new Position(destiny.Row - 1, destiny.Column);
+                    }
+
+                    capturedPiece = Board.RemovePiece(pawnPosition);
+                    CapturedPieces.Add(capturedPiece);
+                }
+            }
+
             return capturedPiece;
         }
 
@@ -54,6 +97,46 @@ namespace CSharpChess.Chess
                 CapturedPieces.Remove(capturedPiece);
             }
             Board.InsertPiece(piece, origin);
+
+            // Special move "Short Castling"
+            if (piece is King && destiny.Column == origin.Column + 2)
+            {
+                Position rookPosition = new Position(origin.Row, origin.Column + 3);
+                Position destinyRookPosition = new Position(origin.Row, origin.Column + 1);
+                Piece r = Board.RemovePiece(destinyRookPosition);
+                r.DecreaseMovementAmount();
+                Board.InsertPiece(r, rookPosition);
+            }
+
+            // Special move "Long Castling"
+            if (piece is King && destiny.Column == origin.Column - 2)
+            {
+                Position rookPosition = new Position(origin.Row, origin.Column - 4);
+                Position destinyRookPosition = new Position(origin.Row, origin.Column - 1);
+                Piece r = Board.RemovePiece(destinyRookPosition);
+                r.IncreaseMovementAmount();
+                Board.InsertPiece(r, rookPosition);
+            }
+
+            // Special move "En passant"
+            if (piece is Pawn)
+            {
+                if (origin.Column != destiny.Column && capturedPiece == VulnerableEnPassant)
+                {
+                    Piece pawn = Board.RemovePiece(destiny);
+                    Position pawnPosition;
+
+                    if (piece.Color == Color.White)
+                    {
+                        pawnPosition = new Position(3, destiny.Column);
+                    }
+                    else
+                    {
+                        pawnPosition = new Position(4, destiny.Column);
+                    }
+                    Board.InsertPiece(pawn, pawnPosition);
+                }
+            }
         }
 
         public void MakeMove(Position origin, Position destiny)
@@ -64,6 +147,23 @@ namespace CSharpChess.Chess
                 UndoMovement(origin, destiny, capturedPiece);
                 throw new ChessBoardException("You can't put yourself in check.");
             }
+
+            Piece piece = Board.GetPiece(destiny);
+
+            // Special move "Promotion"
+            if (piece is Pawn)
+            {
+                if ((piece.Color == Color.White && destiny.Row == 0) || (piece.Color == Color.Black && destiny.Row == 7))
+                {
+                    piece = Board.RemovePiece(destiny);
+                    Pieces.Remove(piece);
+                    // Creating queen hardcoded but can be dynamic :)
+                    Piece queen = new Queen(Board, piece.Color);
+                    Board.InsertPiece(queen, destiny);
+                    Pieces.Add(queen);
+                }
+            }
+
 
             if (IsInCheck(Opponent(CurrentPlayer)))
             {
@@ -82,6 +182,17 @@ namespace CSharpChess.Chess
             {
                 Round++;
                 ChangePlayer();
+            }
+
+
+            // Special Move En Passant
+            if (piece is Pawn && (destiny.Row == origin.Row - 2 || destiny.Row == origin.Row + 2))
+            {
+                VulnerableEnPassant = piece;
+            }
+            else
+            {
+                VulnerableEnPassant = null;
             }
         }
 
@@ -252,7 +363,7 @@ namespace CSharpChess.Chess
             InsertNewPiece('d', 7, new Rook(Board, Color.White));
             InsertNewPiece('e', 7, new Rook(Board, Color.White));
             InsertNewPiece('e', 8, new Rook(Board, Color.White));
-            InsertNewPiece('d', 8, new King(Board, Color.Black));
+            InsertNewPiece('d', 8, new King(Board, Color.Black, this));
 
 
 

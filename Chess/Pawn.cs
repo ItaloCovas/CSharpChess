@@ -55,15 +55,15 @@ namespace CSharpChess.Chess
                 // Special move "en passant"
                 if (Position.Row == 3)
                 {
-                    Position esquerda = new Position(Position.Row, Position.Column - 1);
-                    if (Board.IsPositionValid(esquerda) && HasEnemy(esquerda) && Board.GetPiece(esquerda) == Match.vulneravelEnPassant)
+                    Position left = new Position(Position.Row, Position.Column - 1);
+                    if (Board.IsPositionValid(left) && HasEnemy(left) && Board.GetPiece(left) == Match.VulnerableEnPassant)
                     {
-                        movements[esquerda.Row - 1, esquerda.Column] = true;
+                        movements[left.Row - 1, left.Column] = true;
                     }
-                    Position direita = new Position(Position.Row, Position.Column + 1);
-                    if (Board.IsPositionValid(direita) && HasEnemy(direita) && Board.GetPiece(direita) == Match.vulneravelEnPassant)
+                    Position right = new Position(Position.Row, Position.Column + 1);
+                    if (Board.IsPositionValid(right) && HasEnemy(right) && Board.GetPiece(right) == Match.VulnerableEnPassant)
                     {
-                        movements[direita.Row - 1, direita.Column] = true;
+                        movements[right.Row - 1, right.Column] = true;
                     }
                 }
             }
@@ -94,15 +94,15 @@ namespace CSharpChess.Chess
                 // Special move "en passant"
                 if (Position.Row == 4)
                 {
-                    Position esquerda = new Position(Position.Row, Position.Column - 1);
-                    if (Board.IsPositionValid(esquerda) && HasEnemy(esquerda) && Board.GetPiece(esquerda) == Match.vulneravelEnPassant)
+                    Position left = new Position(Position.Row, Position.Column - 1);
+                    if (Board.IsPositionValid(left) && HasEnemy(left) && Board.GetPiece(left) == Match.VulnerableEnPassant)
                     {
-                        movements[esquerda.Row + 1, esquerda.Column] = true;
+                        movements[left.Row + 1, left.Column] = true;
                     }
-                    Position direita = new Position(Position.Row, Position.Column + 1);
-                    if (Board.IsPositionValid(direita) && HasEnemy(direita) && Board.GetPiece(direita) == Match.vulneravelEnPassant)
+                    Position right = new Position(Position.Row, Position.Column + 1);
+                    if (Board.IsPositionValid(right) && HasEnemy(right) && Board.GetPiece(right) == Match.VulnerableEnPassant)
                     {
-                        movements[direita.Row + 1, direita.Column] = true;
+                        movements[right.Row + 1, right.Column] = true;
                     }
                 }
             }

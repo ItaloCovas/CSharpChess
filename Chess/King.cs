@@ -5,9 +5,11 @@ namespace CSharpChess.Chess
 {
     class King : Piece
     {
-        public King(ChessBoard board, Color color) : base(board, color)
-        {
+        private Match Match;
 
+        public King(ChessBoard board, Color color, Match match) : base(board, color)
+        {
+            Match = match;
         }
 
         private bool CanMove(Position position)
@@ -15,6 +17,12 @@ namespace CSharpChess.Chess
             Piece piece = Board.GetPiece(position);
 
             return piece == null || piece.Color != Color;
+        }
+
+        private bool RookCastling(Position position)
+        {
+            Piece piece = Board.GetPiece(position);
+            return piece != null && piece is Rook && piece.Color == Color && piece.MovementAmount == 0;
         }
 
         public override bool[,] PossibleMovements()
@@ -77,6 +85,36 @@ namespace CSharpChess.Chess
             if (Board.IsPositionValid(position) && CanMove(position))
             {
                 movements[position.Row, position.Column] = true;
+            }
+
+            // Special move "Castling"
+            if (MovementAmount == 0 && !Match.Check)
+            {
+                // Short Castling
+                Position rookPosition = new Position(Position.Row, Position.Column + 3);
+                if (RookCastling(rookPosition))
+                {
+                    Position p1 = new Position(Position.Row, Position.Column + 1);
+                    Position p2 = new Position(Position.Row, Position.Column + 2);
+                    if (Board.GetPiece(p1) == null && Board.GetPiece(p2) == null)
+                    {
+                        movements[Position.Row, Position.Column + 2] = true;
+                    }
+                }
+
+                // Long Castling
+                Position rookPosition2 = new Position(Position.Row, Position.Column - 4);
+                if (RookCastling(rookPosition2))
+                {
+                    Position p1 = new Position(Position.Row, Position.Column - 1);
+                    Position p2 = new Position(Position.Row, Position.Column - 2);
+                    Position p3 = new Position(Position.Row, Position.Column - 3);
+
+                    if (Board.GetPiece(p1) == null && Board.GetPiece(p2) == null && Board.GetPiece(p3) == null)
+                    {
+                        movements[Position.Row, Position.Column - 2] = true;
+                    }
+                }
             }
 
             return movements;
