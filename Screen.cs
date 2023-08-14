@@ -38,6 +38,7 @@ namespace CSharpChess
             Console.WriteLine("Captured pieces:");
             Console.Write("White: ");
             PrintPieces(match.GetCapturedPieces(Color.White));
+            Console.WriteLine("");
             Console.Write(" Black: ");
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -61,9 +62,9 @@ namespace CSharpChess
             string s = Console.ReadLine();
 
             char column = s[0];
-            int line = int.Parse(s[1] + "");
+            int row = int.Parse(s[1] + "");
 
-            return new ChessPosition(column, line);
+            return new ChessPosition(column, row);
         }
         public static void PrintBoard(ChessBoard board)
         {
@@ -74,7 +75,7 @@ namespace CSharpChess
                 {
                     PrintPiece(board.GetPiece(i, j));
                 }
-                Console.WriteLine();
+                Console.WriteLine("");
             }
             Console.WriteLine("  A B C D E F G H");
         }
@@ -102,7 +103,7 @@ namespace CSharpChess
                     PrintPiece(board.GetPiece(i, j));
                     Console.BackgroundColor = originalBackground;
                 }
-                Console.WriteLine();
+                Console.WriteLine("");
             }
             Console.WriteLine("  A B C D E F G H");
             Console.BackgroundColor = originalBackground;

@@ -71,7 +71,7 @@ namespace CSharpChess.Chess
 
         public override string ToString()
         {
-            return "KN";
+            return "C";
         }
     }
 }

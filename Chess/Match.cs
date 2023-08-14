@@ -16,7 +16,7 @@ namespace CSharpChess.Chess
 
         private HashSet<Piece> Pieces;
         private HashSet<Piece> CapturedPieces;
-        public Piece VulnerableEnPassant;
+        public Piece VulnerableEnPassant { get; set; }
 
 
         public Match()
@@ -351,19 +351,39 @@ namespace CSharpChess.Chess
         }
         private void InsertPieces()
         {
-            InsertNewPiece('c', 1, new Rook(Board, Color.White));
-            InsertNewPiece('c', 2, new Rook(Board, Color.White));
-            InsertNewPiece('d', 2, new Rook(Board, Color.White));
-            InsertNewPiece('e', 2, new Rook(Board, Color.White));
-            InsertNewPiece('e', 1, new Rook(Board, Color.White));
-            InsertNewPiece('d', 1, new Rook(Board, Color.White));
+            InsertNewPiece('a', 1, new Rook(Board, Color.White));
+            InsertNewPiece('b', 1, new Knight(Board, Color.White));
+            InsertNewPiece('c', 1, new Bishop(Board, Color.White));
+            InsertNewPiece('d', 1, new Queen(Board, Color.White));
+            InsertNewPiece('e', 1, new King(Board, Color.White, this));
+            InsertNewPiece('f', 1, new Bishop(Board, Color.White));
+            InsertNewPiece('g', 1, new Knight(Board, Color.White));
+            InsertNewPiece('h', 1, new Rook(Board, Color.White));
+            InsertNewPiece('a', 2, new Pawn(Board, Color.White, this));
+            InsertNewPiece('b', 2, new Pawn(Board, Color.White, this));
+            InsertNewPiece('c', 2, new Pawn(Board, Color.White, this));
+            InsertNewPiece('d', 2, new Pawn(Board, Color.White, this));
+            InsertNewPiece('e', 2, new Pawn(Board, Color.White, this));
+            InsertNewPiece('f', 2, new Pawn(Board, Color.White, this));
+            InsertNewPiece('g', 2, new Pawn(Board, Color.White, this));
+            InsertNewPiece('h', 2, new Pawn(Board, Color.White, this));
 
-            InsertNewPiece('c', 7, new Rook(Board, Color.White));
-            InsertNewPiece('c', 8, new Rook(Board, Color.White));
-            InsertNewPiece('d', 7, new Rook(Board, Color.White));
-            InsertNewPiece('e', 7, new Rook(Board, Color.White));
-            InsertNewPiece('e', 8, new Rook(Board, Color.White));
-            InsertNewPiece('d', 8, new King(Board, Color.Black, this));
+            InsertNewPiece('a', 8, new Rook(Board, Color.Black));
+            InsertNewPiece('b', 8, new Knight(Board, Color.Black));
+            InsertNewPiece('c', 8, new Bishop(Board, Color.Black));
+            InsertNewPiece('d', 8, new Queen(Board, Color.Black));
+            InsertNewPiece('e', 8, new King(Board, Color.Black, this));
+            InsertNewPiece('f', 8, new Bishop(Board, Color.Black));
+            InsertNewPiece('g', 8, new Knight(Board, Color.Black));
+            InsertNewPiece('h', 8, new Rook(Board, Color.Black));
+            InsertNewPiece('a', 7, new Pawn(Board, Color.Black, this));
+            InsertNewPiece('b', 7, new Pawn(Board, Color.Black, this));
+            InsertNewPiece('c', 7, new Pawn(Board, Color.Black, this));
+            InsertNewPiece('d', 7, new Pawn(Board, Color.Black, this));
+            InsertNewPiece('e', 7, new Pawn(Board, Color.Black, this));
+            InsertNewPiece('f', 7, new Pawn(Board, Color.Black, this));
+            InsertNewPiece('g', 7, new Pawn(Board, Color.Black, this));
+            InsertNewPiece('h', 7, new Pawn(Board, Color.Black, this));
 
 
 
