@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\CSharpChess.csproj": {}
+    "c:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\CSharpChess.csproj": {}
   },
   "projects": {
-    "C:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\CSharpChess.csproj": {
+    "c:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\CSharpChess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\CSharpChess.csproj",
+        "projectUniqueName": "c:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\CSharpChess.csproj",
         "projectName": "CSharpChess",
-        "projectPath": "C:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\CSharpChess.csproj",
+        "projectPath": "c:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\CSharpChess.csproj",
         "packagesPath": "C:\\Users\\italo\\.nuget\\packages\\",
-        "outputPath": "C:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\obj\\",
+        "outputPath": "c:\\Pessoal\\Cursos\\Curso Nelio Alves\\Projetos\\CSharpChess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\italo\\AppData\\Roaming\\NuGet\\NuGet.Config",

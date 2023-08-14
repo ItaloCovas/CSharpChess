@@ -74,8 +74,15 @@ namespace CSharpChess.Chess
                 Check = false;
             }
 
-            Round++;
-            ChangePlayer();
+            if (TestCheckMate(Opponent(CurrentPlayer)))
+            {
+                Finished = true;
+            }
+            else
+            {
+                Round++;
+                ChangePlayer();
+            }
         }
 
 
@@ -113,7 +120,7 @@ namespace CSharpChess.Chess
 
         public void ValidateDestinyPosition(Position origin, Position destiny)
         {
-            if (!Board.GetPiece(origin).CanMoveTo(destiny))
+            if (!Board.GetPiece(origin).PossibleMovement(destiny))
             {
                 throw new ChessBoardException("Invalid destiny position!");
             }
@@ -158,6 +165,38 @@ namespace CSharpChess.Chess
                 }
             }
             return null;
+        }
+
+        public bool TestCheckMate(Color color)
+        {
+            if (!IsInCheck(color))
+            {
+                return false;
+            }
+
+            foreach (Piece piece in InGamePieces(color))
+            {
+                bool[,] arr = piece.PossibleMovements();
+                for (int i = 0; i < Board.Rows; i++)
+                {
+                    for (int j = 0; j < Board.Columns; j++)
+                    {
+                        if (arr[i, j])
+                        {
+                            Position destiny = new Position(i, j);
+                            Piece capturedPiece = MakePieceMovement(piece.Position, destiny);
+                            bool testCheck = IsInCheck(color);
+                            UndoMovement(piece.Position, destiny, capturedPiece);
+                            if (!testCheck)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         public bool IsInCheck(Color color)

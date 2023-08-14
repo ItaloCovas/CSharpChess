@@ -14,12 +14,23 @@ namespace CSharpChess
             PrintCapturedPieces(match);
             Console.WriteLine();
             Console.WriteLine($"Round: {match.Round}");
-            Console.WriteLine($"Waiting for move: {match.CurrentPlayer}");
-            if (match.Check)
-            {
-                Console.WriteLine("CHECK!!!");
 
+            if (!match.Finished)
+            {
+                Console.WriteLine($"Waiting for move: {match.CurrentPlayer}");
+                if (match.Check)
+                {
+                    Console.WriteLine("CHECK!!!");
+
+                }
             }
+            else
+            {
+                Console.WriteLine("CHECKMATE!!!");
+                Console.WriteLine($"Winner: {match.CurrentPlayer}");
+            }
+
+
         }
 
         public static void PrintCapturedPieces(Match match)
